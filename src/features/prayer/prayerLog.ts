@@ -1,6 +1,7 @@
 import { supabase } from "../../lib/supabase";
 import { postToFeed, myCircles } from "../circle/circle";
 import type { PrayerName } from "../../lib/prayerTimes";
+import { streakFromDays, type DayCounts, type Pause } from "./streak";
 
 export type PrayerStatus = "on_time" | "late" | "qada" | "missed";
 export type VerifyMethod = "honor" | "proof_ai" | "manual";
@@ -73,35 +74,18 @@ export async function recomputeStreak(): Promise<number> {
     supabase.from("streak_pauses").select("start_date, end_date").eq("user_id", uid),
   ]);
 
-  const byDay = new Map<string, number>();
+  const byDay: DayCounts = new Map();
   for (const p of prayers ?? []) {
     if (p.status === "on_time" || p.status === "late") {
       byDay.set(p.local_date, (byDay.get(p.local_date) ?? 0) + 1);
     }
   }
-  const paused = (day: string) =>
-    (pauses ?? []).some(
-      (z: any) => day >= z.start_date && (!z.end_date || day <= z.end_date)
-    );
+  const pauseRanges: Pause[] = (pauses ?? []).map((z: any) => ({
+    start: z.start_date,
+    end: z.end_date,
+  }));
 
-  let streak = 0;
-  const cursor = new Date();
-  for (let i = 0; i < 400; i++) {
-    const day = cursor.toISOString().slice(0, 10);
-    if (paused(day)) {
-      cursor.setDate(cursor.getDate() - 1);
-      continue;
-    }
-    if ((byDay.get(day) ?? 0) >= 4) {
-      streak++;
-    } else if (i === 0) {
-      // today not yet complete — don't break the streak, just don't add
-    } else {
-      break;
-    }
-    cursor.setDate(cursor.getDate() - 1);
-  }
-
+  const streak = streakFromDays(byDay, pauseRanges, new Date());
   await supabase.from("profiles").update({ current_streak: streak }).eq("id", uid);
   return streak;
 }

@@ -6,7 +6,20 @@ import {
   Madhab,
   CalculationParameters,
 } from "adhan";
-import type { SalahWindow } from "../../modules/screen-time";
+
+/**
+ * Local copy of the native module's SalahWindow shape. Kept here (rather than
+ * imported from modules/screen-time) so this file depends only on `adhan` and
+ * stays unit-testable without pulling in the React Native / Expo runtime.
+ * The native module re-declares the identical type.
+ */
+export type SalahWindow = {
+  name: string;
+  startHour: number;
+  startMinute: number;
+  endHour: number;
+  endMinute: number;
+};
 
 export type PrayerName = "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
 export const PRAYERS: PrayerName[] = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
