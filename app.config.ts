@@ -28,6 +28,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     bundleIdentifier: BUNDLE_ID,
     supportsTablet: true,
+    usesAppleSignIn: true,
     config: { usesNonExemptEncryption: false },
     infoPlist: {
       NSCameraUsageDescription:
@@ -51,6 +52,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     "expo-router",
     "expo-secure-store",
+    "expo-apple-authentication",
     "expo-location",
     "expo-notifications",
     [

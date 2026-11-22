@@ -113,6 +113,24 @@ npx expo prebuild --clean
 npx expo run:ios --device
 ```
 
+### Onboarding & security
+Flow: **Sign in with Apple** (or email one-time code) → confirm name + mark →
+in-context permission priming (Screen Time, Notifications, Location — each
+explained *before* the system prompt) → in. State is gated by `profiles.onboarded`.
+
+- **Session tokens live in the Keychain/Keystore** (`src/lib/secureStorage.ts`),
+  not plaintext AsyncStorage. Chunked to beat SecureStore's ~2KB limit.
+- **Apple sign-in is nonce-bound** (SHA-256 to Apple, raw to Supabase) so a
+  stolen identity token can't be replayed.
+- **Passwordless** — nothing to breach; no password store.
+- All user data is behind Postgres **Row Level Security** (migration `0001`).
+
+Enable Apple sign-in once, on your side:
+1. Apple Developer → your App ID → enable **Sign in with Apple** capability.
+2. Supabase → Authentication → Providers → **Apple** → add your Services ID /
+   bundle `com.flicktek.muslimpromax`.
+3. `expo prebuild` adds the entitlement automatically (`usesAppleSignIn`).
+
 ### Secrets — the one rule
 `ANTHROPIC_API_KEY` lives **only** in Supabase Edge Function secrets. It is never
 in the app, `.env`, or git. The device calls `verify-prayer`; the function calls
