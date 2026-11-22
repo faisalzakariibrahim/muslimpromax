@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet, ScrollView, Switch, Alert } from "react-native";
+import { router } from "expo-router";
 import { theme } from "@/lib/theme";
 import ScreenTime from "@modules/screen-time";
 import {
@@ -81,6 +82,11 @@ export default function Focus() {
           <ModeChip label="Honor" sub="Tap “I prayed”" active={mode === "honor"} onPress={() => toggleMode("honor")} />
           <ModeChip label="Proof" sub="Scan with camera" active={mode === "proof"} onPress={() => toggleMode("proof")} />
         </View>
+        {mode === "proof" && (
+          <Pressable style={[s.btn, { marginTop: 10 }]} onPress={() => router.push("/verify")}>
+            <Text style={s.btnText}>📷 Verify prayer with Proof Mode</Text>
+          </Pressable>
+        )}
       </Step>
 
       <Step n={4} title="Arm for today" done={armed > 0}>

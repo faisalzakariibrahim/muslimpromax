@@ -105,3 +105,17 @@ export function nextPrayer(
   }
   return { name: "fajr", at: times.fajr }; // tomorrow
 }
+
+/** The most recent prayer whose time has already passed today (the active window). */
+export function currentPrayer(
+  times: Record<PrayerName, Date>,
+  now = new Date()
+): { name: PrayerName; at: Date } {
+  let current: { name: PrayerName; at: Date } = { name: "isha", at: times.isha };
+  for (const name of PRAYERS) {
+    if (times[name] <= now) current = { name, at: times[name] };
+  }
+  // Before Fajr: the still-active window is last night's Isha.
+  if (now < times.fajr) return { name: "isha", at: times.isha };
+  return current;
+}
