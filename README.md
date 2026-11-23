@@ -72,10 +72,11 @@ supabase/
 | Focus score | Sabr Score | **Noor Score** | **built** |
 | **Social Prayer Circle** | ❌ | ✅ | **built** — our wedge |
 | Qibla compass | ✅ | ⏳ | lib ready (`qiblaDirection`) |
+| Prayer-time notifications (+ reminders) | ✅ | ✅ | **built** — time-sensitive, with "I prayed" / "Verify now" actions |
 | Qur'an / Hadith / Dua / Tasbih | ✅ | ⏳ | roadmap (bundled data) |
 | Islamic presets (Jummah/Tahajjud/Taraweeh/Last 10) | ✅ | ⏳ | roadmap |
 | Widgets + Live Activities | ✅ | ⏳ | roadmap (WidgetKit/ActivityKit targets) |
-| Full-screen prayer alarm | ✅ | ⏳ | roadmap |
+| Full-screen prayer alarm | ✅ | ◐ | partial — time-sensitive notifications; persistent alarm is a follow-up |
 | Travel Mode (Qasr) | ✅ | ⏳ | roadmap |
 | Mac / Watch | ✅ | ⏳ | roadmap |
 | App Store Challenges (in-app events) | ✅ | ⏳ | marketing |

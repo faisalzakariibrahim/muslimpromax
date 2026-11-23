@@ -7,7 +7,16 @@ import { useSession } from "@/features/auth/useSession";
 import { useAppStore } from "@/lib/store";
 import { consumePrayedFromShield, armForToday } from "@/features/blocking/salahFocus";
 import { recomputeStreak } from "@/features/prayer/prayerLog";
+import {
+  configureNotificationHandler,
+  registerPrayerCategory,
+  schedulePrayerNotifications,
+} from "@/features/notifications/prayerNotifications";
+import { useNotificationRouting } from "@/features/notifications/useNotificationRouting";
 import { theme } from "@/lib/theme";
+
+// Install the foreground-notification handler once, before any component mounts.
+configureNotificationHandler();
 
 export default function RootLayout() {
   const { session, loading } = useSession();
@@ -15,13 +24,23 @@ export default function RootLayout() {
   const onboarded = useAppStore((s) => s.onboarded);
   const loadOnboarded = useAppStore((s) => s.loadOnboarded);
 
+  // Register the prayer notification category/actions once.
+  useEffect(() => {
+    registerPrayerCategory().catch(() => {});
+  }, []);
+
+  // Route taps on prayer notifications ("I prayed" / "Verify now").
+  useNotificationRouting();
+
   // When signed in: learn onboarding state, credit any shield "I prayed" tap,
-  // re-arm today's windows (prayer times drift daily), refresh the streak.
+  // re-arm today's windows and re-schedule notifications (both drift daily),
+  // refresh the streak.
   useEffect(() => {
     if (!session) return;
     loadOnboarded(session.user.id);
     if (consumePrayedFromShield()) recomputeStreak().catch(() => {});
     armForToday().catch(() => {});
+    schedulePrayerNotifications().catch(() => {});
   }, [session, loadOnboarded]);
 
   const booting = loading || (!!session && onboarded === null);
