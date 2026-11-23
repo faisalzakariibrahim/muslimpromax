@@ -73,7 +73,10 @@ supabase/
 | **Social Prayer Circle** | ❌ | ✅ | **built** — our wedge |
 | Qibla compass | ✅ | ⏳ | lib ready (`qiblaDirection`) |
 | Prayer-time notifications (+ reminders) | ✅ | ✅ | **built** — time-sensitive, with "I prayed" / "Verify now" actions |
-| Qur'an / Hadith / Dua / Tasbih | ✅ | ⏳ | roadmap (bundled data) |
+| Qur'an reader (Arabic + EN + translit) | ✅ | ✅ | **built** — 114 surahs, fully offline (Tanzil data) |
+| Dua & Adhkar | ✅ | ✅ | **built** — 134 categories, offline (Hisnul Muslim) |
+| Tasbih counter | ✅ | ✅ | **built** — dhikr presets, haptics, lifetime totals |
+| Hadith | ✅ | ◐ | scaffold only — awaiting a vetted, graded dataset (no fabricated text) |
 | Islamic presets (Jummah/Tahajjud/Taraweeh/Last 10) | ✅ | ⏳ | roadmap |
 | Widgets + Live Activities | ✅ | ⏳ | roadmap (WidgetKit/ActivityKit targets) |
 | Full-screen prayer alarm | ✅ | ◐ | partial — time-sensitive notifications; persistent alarm is a follow-up |
